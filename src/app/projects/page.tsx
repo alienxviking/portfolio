@@ -46,6 +46,18 @@ const PROJECTS = [
   },
   {
     id: 4,
+    name: "Sift",
+    description: `A multi-tenant document processing & hybrid search platform. Upload files and an async pipeline extracts text, runs OCR, and builds thumbnails, with live status over WebSockets. Postgres FTS + pgvector semantic search fused via RRF. FastAPI + Celery/Redis + Next.js, 100% free-tier.`,
+    link: "https://sift-omega-rose.vercel.app",
+    images: [
+      "/assets/projects-screenshots/sift/1.png",
+      "/assets/projects-screenshots/sift/2.png",
+      "/assets/projects-screenshots/sift/3.png",
+      "/assets/projects-screenshots/sift/4.png",
+    ],
+  },
+  {
+    id: 5,
     name: "Chess Game",
     description: `A smooth chess experience having both the option to play local multiplayer as well as against ai. Stockfish API was used to set 3 difficulty levels.`,
     link: "https://github.com/alienxviking/chess-pygame",
@@ -57,7 +69,7 @@ const PROJECTS = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     name: "cook.io",
     description: `A recipe finding website that allows users to search for recipes by name, ingredients, or cuisine. Built using HTML, CSS, and Vanilla JavaScript. This was my first project after learning JavaScript.`,
     link: "https://alienxviking.github.io/cookio/",

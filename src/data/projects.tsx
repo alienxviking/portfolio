@@ -36,6 +36,8 @@ import {
   SiArduino,
   SiThreedotjs as SiThreejs,
   SiGooglegemini,
+  SiFastapi,
+  SiRedis,
 } from "react-icons/si";
 import { TbBrandFramerMotion } from "react-icons/tb";
 import css from "styled-jsx/css";
@@ -305,6 +307,18 @@ const PROJECT_SKILLS = {
     bg: "black",
     fg: "white",
     icon: <SiGooglegemini/>,
+  },
+  fastapi: {
+    title: "FastAPI",
+    bg: "black",
+    fg: "white",
+    icon: <SiFastapi/>,
+  },
+  redis: {
+    title: "Redis",
+    bg: "black",
+    fg: "white",
+    icon: <SiRedis/>,
   },
 };
 export type Project = {
@@ -956,7 +970,73 @@ const projects: Project[] = [
       );
     },
   },
-  { // 04. Chess Game
+  { // 04. Sift
+    id: "sift",
+    category: "Full Stack / Backend",
+    title: "Sift",
+    src: "/assets/projects-screenshots/sift/1.png",
+    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    live: "https://sift-omega-rose.vercel.app",
+    github: "https://github.com/alienxviking/sift",
+    skills: {
+      frontend: [
+        PROJECT_SKILLS.ts,
+        PROJECT_SKILLS.next,
+        PROJECT_SKILLS.react,
+        PROJECT_SKILLS.shadcn,
+        PROJECT_SKILLS.tailwind,
+      ],
+      backend: [
+        PROJECT_SKILLS.python,
+        PROJECT_SKILLS.fastapi,
+        PROJECT_SKILLS.postgres,
+        PROJECT_SKILLS.redis,
+        PROJECT_SKILLS.docker,
+      ],
+    },
+    get content() {
+      return (
+        <div>
+          <TypographyP className="font-mono text-2xl text-center">
+            Sift: Document processing &amp; hybrid search platform
+          </TypographyP>
+          <TypographyP className="font-mono ">
+            Sift is a multi-tenant document platform: upload files and a background pipeline
+            extracts text, runs OCR, and generates thumbnails — with live processing status
+            streamed over WebSockets. Built with an async FastAPI backend and a Next.js frontend,
+            and engineered to run 100% on free tiers with no paid APIs.
+          </TypographyP>
+          <ProjectsLinks live={this.live} repo={this.github} />
+          <TypographyH3 className="my-4 mt-8">Async Processing Pipeline</TypographyH3>
+          <p className="font-mono mb-2">
+            A Celery + Redis worker handles ingestion off the request path: PyMuPDF text
+            extraction with per-page Tesseract OCR fallback, python-docx, and Pillow
+            thumbnails — all persisted to Postgres and S3/MinIO.
+          </p>
+          <SlideShow
+            images={[
+              `${BASE_PATH}/sift/1.png`,
+              `${BASE_PATH}/sift/2.png`,
+            ]}
+          />
+          <TypographyH3 className="my-4 mt-8">Hybrid Search</TypographyH3>
+          <p className="font-mono mb-2">
+            Combines Postgres full-text search with pgvector semantic search, fused via
+            Reciprocal Rank Fusion. Embeddings run locally through fastembed
+            (BAAI/bge-small-en-v1.5) — no external API. Plus collections, tags, and
+            token-based team invites.
+          </p>
+          <SlideShow
+            images={[
+              `${BASE_PATH}/sift/3.png`,
+              `${BASE_PATH}/sift/4.png`,
+            ]}
+          />
+        </div>
+      );
+    },
+  },
+  { // 05. Chess Game
     id: "chess",
     category: "Game",
     title: "Chess Game",
@@ -986,7 +1066,7 @@ const projects: Project[] = [
       );
     },
   },
-  { // 05. cook.io project
+  { // 06. cook.io project
     id: "cook.io",
     category: "Frontend",
     title: "cook.io",
