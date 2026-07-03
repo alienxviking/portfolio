@@ -966,7 +966,7 @@ const projects: Project[] = [
     title: "Sift",
     src: "/assets/projects-screenshots/sift/1.png",
     screenshots: ["1.png", "2.png", "3.png", "4.png"],
-    live: "https://sift-omega-rose.vercel.app",
+    live: "https://sift-docprocess.vercel.app/",
     github: "https://github.com/alienxviking/sift",
     skills: {
       frontend: [

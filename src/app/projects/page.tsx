@@ -49,7 +49,7 @@ const PROJECTS = [
     id: 4,
     name: "Sift",
     description: `A multi-tenant document processing & hybrid search platform. Upload files and an async pipeline extracts text, runs OCR, and builds thumbnails, with live status over WebSockets. Postgres FTS + pgvector semantic search fused via RRF. FastAPI + Celery/Redis + Next.js, 100% free-tier.`,
-    link: "https://sift-omega-rose.vercel.app",
+    link: "https://sift-docprocess.vercel.app/",
     images: [
       "/assets/projects-screenshots/sift/1.png",
       "/assets/projects-screenshots/sift/2.png",
