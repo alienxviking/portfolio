@@ -30,6 +30,8 @@ const PROJECTS = [
       "/assets/projects-screenshots/momentum/2.png",
       "/assets/projects-screenshots/momentum/3.png",
       "/assets/projects-screenshots/momentum/4.png",
+      "/assets/projects-screenshots/momentum/5.png",
+      "/assets/projects-screenshots/momentum/6.png",
     ],
   },
   {

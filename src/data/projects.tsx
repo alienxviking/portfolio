@@ -857,7 +857,7 @@ const projects: Project[] = [
     category: "Full Stack",
     title: "Momentum",
     src: "/assets/projects-screenshots/momentum/1.png",
-    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    screenshots: ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"],
     live: "https://momentum-seven-flame.vercel.app",
     github: "https://github.com/alienxviking/momentum",
     skills: {
@@ -889,8 +889,9 @@ const projects: Project[] = [
           </p>
           <SlideShow
             images={[
-              `${BASE_PATH}/momentum/1.png`,
               `${BASE_PATH}/momentum/2.png`,
+              `${BASE_PATH}/momentum/3.png`,
+              `${BASE_PATH}/momentum/4.png`,
             ]}
           />
           <TypographyH3 className="my-4 mt-8">Groups, Reviews & Analytics</TypographyH3>
@@ -901,8 +902,8 @@ const projects: Project[] = [
           </p>
           <SlideShow
             images={[
-              `${BASE_PATH}/momentum/3.png`,
-              `${BASE_PATH}/momentum/4.png`,
+              `${BASE_PATH}/momentum/5.png`,
+              `${BASE_PATH}/momentum/6.png`,
             ]}
           />
         </div>
