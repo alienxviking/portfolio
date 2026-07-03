@@ -915,7 +915,7 @@ const projects: Project[] = [
     category: "Full Stack",
     title: "Nexo Chat",
     src: "/assets/projects-screenshots/nexo/1.png",
-    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    screenshots: ["1.png", "2.png", "3.png"],
     live: "https://nexo-navy.vercel.app",
     github: "https://github.com/alienxviking/nexo",
     skills: {
@@ -952,19 +952,8 @@ const projects: Project[] = [
           </p>
           <SlideShow
             images={[
-              `${BASE_PATH}/nexo/1.png`,
               `${BASE_PATH}/nexo/2.png`,
-            ]}
-          />
-          <TypographyH3 className="my-4 mt-8">Built for Scale</TypographyH3>
-          <p className="font-mono mb-2">
-            A Node.js + Express + Socket.io backend with Prisma over PostgreSQL powers fast,
-            reliable real-time delivery.
-          </p>
-          <SlideShow
-            images={[
               `${BASE_PATH}/nexo/3.png`,
-              `${BASE_PATH}/nexo/4.png`,
             ]}
           />
         </div>

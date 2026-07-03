@@ -43,7 +43,6 @@ const PROJECTS = [
       "/assets/projects-screenshots/nexo/1.png",
       "/assets/projects-screenshots/nexo/2.png",
       "/assets/projects-screenshots/nexo/3.png",
-      "/assets/projects-screenshots/nexo/4.png",
     ],
   },
   {
