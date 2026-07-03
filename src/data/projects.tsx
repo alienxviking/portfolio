@@ -34,6 +34,8 @@ import {
   SiApachemaven,
   SiCplusplus,
   SiArduino,
+  SiThreedotjs as SiThreejs,
+  SiGooglegemini,
 } from "react-icons/si";
 import { TbBrandFramerMotion } from "react-icons/tb";
 import css from "styled-jsx/css";
@@ -291,6 +293,18 @@ const PROJECT_SKILLS = {
     bg: "black",
     fg: "white",
     icon: <SiArduino/>,
+  },
+  threejs: {
+    title: "Three.js",
+    bg: "black",
+    fg: "white",
+    icon: <SiThreejs/>,
+  },
+  gemini: {
+    title: "Gemini AI",
+    bg: "black",
+    fg: "white",
+    icon: <SiGooglegemini/>,
   },
 };
 export type Project = {
@@ -769,154 +783,175 @@ const projects: Project[] = [
   // },
 
   // +
-  { // 01. cook.io project
-    id: "cook.io",
-    category: "Frontend",
-    title: "cook.io",
-    src: "/assets/projects-screenshots/cook.io/1.png",
-    screenshots: ["1.png", "2.png", "3.png", "4.png"],
-    live: "https://alienxviking.github.io/cookio/",
-    github:"https://github.com/alienxviking/cookio",
-    skills: {
-      frontend: [PROJECT_SKILLS.js, PROJECT_SKILLS.html, PROJECT_SKILLS.css],
-      backend: [],
-    },
-    get content() {
-      return (
-        <div>
-          <TypographyP className="font-mono ">
-          A recipe finding website that allows users to search for recipes by name, ingredients, or cuisine. 
-          Built using HTML, CSS, and Vanilla JavaScript. 
-          This was my first project after learning JavaScript.
-          </TypographyP>
-          <ProjectsLinks live={this.live} repo={this.github} />
-          <SlideShow
-            images={[
-              `${BASE_PATH}/cook.io/1.png`,
-              `${BASE_PATH}/cook.io/2.png`,
-              `${BASE_PATH}/cook.io/3.png`,
-              `${BASE_PATH}/cook.io/4.png`,
-            ]}
-          />
-        </div>
-      );
-    },
-  },
-  { // 02. TidyMind
-    id: "tidymind",
-    category: "Web Application",
-    title: "TidyMind",
-    src: "/assets/projects-screenshots/tidymind/1.png",
-    screenshots: ["/assets/projects-screenshots/tidymind/1.png"],
-    skills: {
-      frontend: [
-        PROJECT_SKILLS.html,
-        PROJECT_SKILLS.css,
-        PROJECT_SKILLS.js,
-        PROJECT_SKILLS.react,
-        PROJECT_SKILLS.ts,
-      ],
-      backend: [
-        PROJECT_SKILLS.node,
-        PROJECT_SKILLS.vite,
-      ],
-    },
-    live: "https://tidymind-final.vercel.app/",
-    github: "https://github.com/alienxviking/tidymind-final",
-    get content() {
-      return (
-        <div>
-          <TypographyP className="font-mono text-2xl text-center">
-            TidyMind: A Decluttering Web Application
-          </TypographyP>
-          <TypographyP className="font-mono ">
-            TidyMind is a web application that helps users declutter their minds and stay organized. 
-            It is built using Electron JS, HTML, CSS, React and Node JS.
-            It is an Electron Application so it won&apos;t work on the web, but only when installed locally in the device.
-          </TypographyP>
-          <ProjectsLinks live={this.live} repo={this.github} />
-          <TypographyH3 className="my-4 mt-8">Architecture </TypographyH3>
-          <p className="font-mono mb-2">
-            The project is divided into three features:
-            1. Semantic Search 
-            2. Finding and deleting duplicate files
-            3. Time capsule feature
-          </p>
-          <SlideShow
-            images={[
-              `${BASE_PATH}/tidymind/1.png`,
-              `${BASE_PATH}/tidymind/2.png`,
-              `${BASE_PATH}/tidymind/3.png`,
-              `${BASE_PATH}/tidymind/4.png`,
-              `${BASE_PATH}/tidymind/5.png`,
-            ]}
-          />
-        </div>
-      );
-    },
-  },
-  { // 03. Portfolio project
-    id: "portfolio",
-    category: "Portfolio",
-    title: "My Portfolio",
-    src: "/assets/projects-screenshots/myportfolio/landing.png",
-    screenshots: ["assets/projects-screenshots/myportfolio/landing.png"],
-    live: "https://snehangshu-roy-portfolio.vercel.app/",
-    github:"https://github.com/alienxviking/portfolio",
+  { // 01. Mind Palace OS
+    id: "mind-palace",
+    category: "AI / 3D Knowledge Tool",
+    title: "Mind Palace OS",
+    src: "/assets/projects-screenshots/mind-palace/1.png",
+    screenshots: ["1.png", "2.png", "3.png"],
+    live: "https://mind-palace-rosy.vercel.app",
+    github: "https://github.com/alienxviking/Mind-Palace",
     skills: {
       frontend: [
         PROJECT_SKILLS.ts,
         PROJECT_SKILLS.next,
-        PROJECT_SKILLS.shadcn,
-        PROJECT_SKILLS.aceternity,
-        PROJECT_SKILLS.framerMotion,
+        PROJECT_SKILLS.react,
+        PROJECT_SKILLS.threejs,
         PROJECT_SKILLS.tailwind,
-        PROJECT_SKILLS.spline,
+        PROJECT_SKILLS.framerMotion,
+        PROJECT_SKILLS.gsap,
       ],
-      backend: [],
+      backend: [PROJECT_SKILLS.supabase, PROJECT_SKILLS.gemini],
     },
     get content() {
       return (
         <div>
+          <TypographyP className="font-mono text-2xl text-center">
+            Mind Palace OS: Architect your thoughts in a 3D neural grid
+          </TypographyP>
           <TypographyP className="font-mono ">
-            Welcome to my digital playground, where creativity meets code in the
-            dopest way possible.
+            Mind Palace OS is a knowledge-visualization operating system that turns static notes
+            into a living 3D universe. Every idea becomes a planet, every connection a glowing
+            neural bridge — and Google Gemini AI automatically summarizes, tags, and links your
+            thoughts into a cohesive network.
           </TypographyP>
           <ProjectsLinks live={this.live} repo={this.github} />
-          <TypographyH3 className="my-4 mt-8">
-            Beautiful 3D Objects{" "}
-          </TypographyH3>
+          <TypographyH3 className="my-4 mt-8">3D Spatial Visualization</TypographyH3>
           <p className="font-mono mb-2">
-            Did you see that 3D keyboard modal? Yeah! I made that. That
-            interactive keyboard is being rendered in 3D on a webpage 🤯, and
-            pressing each keycap reveals a skill in a goofy way. It&apos;s like
-            typing, but make it art.
+            Navigate your knowledge as a galaxy of interconnected nodes with physics-driven,
+            draggable planets and glowing edges — built with Three.js and React Three Fiber.
           </p>
           <SlideShow
             images={[
-              `${BASE_PATH}/myportfolio/landing.png`,
-              `${BASE_PATH}/portfolio/skills.png`,
+              `${BASE_PATH}/mind-palace/1.png`,
+              `${BASE_PATH}/mind-palace/2.png`,
             ]}
           />
-          <TypographyH3 className="my-4 ">Space Theme</TypographyH3>
+          <TypographyH3 className="my-4 mt-8">AI-Powered Architect</TypographyH3>
           <p className="font-mono mb-2">
-            Dark background + floating particles = out-of-this-world cool.
+            Gemini auto-summarizes each node, extracts smart tags, and suggests neural links
+            between seemingly unrelated ideas. A retro-futuristic Palace Terminal lets you
+            create, connect, and find nodes with simple commands.
           </p>
-          <SlideShow images={[`${BASE_PATH}/myportfolio/navbar.png`]} />
-          <TypographyH3 className="my-4 mt-8">Projects</TypographyH3>
-
+          <SlideShow images={[`${BASE_PATH}/mind-palace/3.png`]} />
+        </div>
+      );
+    },
+  },
+  { // 02. Momentum
+    id: "momentum",
+    category: "Full Stack",
+    title: "Momentum",
+    src: "/assets/projects-screenshots/momentum/1.png",
+    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    live: "https://momentum-seven-flame.vercel.app",
+    github: "https://github.com/alienxviking/momentum",
+    skills: {
+      frontend: [
+        PROJECT_SKILLS.ts,
+        PROJECT_SKILLS.next,
+        PROJECT_SKILLS.react,
+        PROJECT_SKILLS.tailwind,
+        PROJECT_SKILLS.framerMotion,
+      ],
+      backend: [PROJECT_SKILLS.supabase, PROJECT_SKILLS.postgres],
+    },
+    get content() {
+      return (
+        <div>
+          <TypographyP className="font-mono text-2xl text-center">
+            Momentum: The social accountability platform for building better habits
+          </TypographyP>
+          <TypographyP className="font-mono ">
+            Momentum helps small groups stay consistent together — track daily habits and
+            streaks, submit progress reports, give each other peer feedback, and climb a real
+            accountability leaderboard. Built with Next.js 16 and Supabase.
+          </TypographyP>
+          <ProjectsLinks live={this.live} repo={this.github} />
+          <TypographyH3 className="my-4 mt-8">Habits & Streaks</TypographyH3>
           <p className="font-mono mb-2">
-            My top personal and freelance projects — no filler, all killer.
+            Daily and weekly habits with streaks and a year-long activity heatmap, plus a real
+            0–100 accountability score computed from submissions, consistency, and goal completion.
           </p>
           <SlideShow
             images={[
-              `${BASE_PATH}/myportfolio/projects.png`,
-              `${BASE_PATH}/myportfolio/project.png`,
+              `${BASE_PATH}/momentum/1.png`,
+              `${BASE_PATH}/momentum/2.png`,
             ]}
           />
-          <p className="font-mono mb-2 mt-8 text-center">
-            This site&apos;s not just a portfolio — it&apos;s a whole vibe.
+          <TypographyH3 className="my-4 mt-8">Groups, Reviews & Analytics</TypographyH3>
+          <p className="font-mono mb-2">
+            Create or join accountability groups via invite links, leave threaded peer reviews,
+            run time-boxed group challenges, and track everything with weekly/monthly charts.
+            Ships as an installable PWA with web-push reminders.
           </p>
+          <SlideShow
+            images={[
+              `${BASE_PATH}/momentum/3.png`,
+              `${BASE_PATH}/momentum/4.png`,
+            ]}
+          />
+        </div>
+      );
+    },
+  },
+  { // 03. Nexo Chat
+    id: "nexo",
+    category: "Full Stack",
+    title: "Nexo Chat",
+    src: "/assets/projects-screenshots/nexo/1.png",
+    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    live: "https://nexo-navy.vercel.app",
+    github: "https://github.com/alienxviking/nexo",
+    skills: {
+      frontend: [
+        PROJECT_SKILLS.ts,
+        PROJECT_SKILLS.next,
+        PROJECT_SKILLS.react,
+        PROJECT_SKILLS.tailwind,
+        PROJECT_SKILLS.sockerio,
+      ],
+      backend: [
+        PROJECT_SKILLS.node,
+        PROJECT_SKILLS.express,
+        PROJECT_SKILLS.prisma,
+        PROJECT_SKILLS.postgres,
+      ],
+    },
+    get content() {
+      return (
+        <div>
+          <TypographyP className="font-mono text-2xl text-center">
+            Nexo: Real-time, premium 1-to-1 private messaging
+          </TypographyP>
+          <TypographyP className="font-mono ">
+            Nexo is a real-time 1-to-1 chat app built on WebSockets with a responsive
+            glassmorphism aesthetic. It delivers authentic chat state — online/offline presence,
+            sent/delivered/seen receipts, and live &quot;typing…&quot; indicators.
+          </TypographyP>
+          <ProjectsLinks live={this.live} repo={this.github} />
+          <TypographyH3 className="my-4 mt-8">Rich Media & Messaging</TypographyH3>
+          <p className="font-mono mb-2">
+            Send images, documents, and voice notes with a deterministic waveform player. Reply
+            to, edit, and delete messages, schedule sends, and set self-destructing messages.
+          </p>
+          <SlideShow
+            images={[
+              `${BASE_PATH}/nexo/1.png`,
+              `${BASE_PATH}/nexo/2.png`,
+            ]}
+          />
+          <TypographyH3 className="my-4 mt-8">Built for Scale</TypographyH3>
+          <p className="font-mono mb-2">
+            A Node.js + Express + Socket.io backend with Prisma over PostgreSQL powers fast,
+            reliable real-time delivery.
+          </p>
+          <SlideShow
+            images={[
+              `${BASE_PATH}/nexo/3.png`,
+              `${BASE_PATH}/nexo/4.png`,
+            ]}
+          />
         </div>
       );
     },
@@ -951,67 +986,33 @@ const projects: Project[] = [
       );
     },
   },
-  { // 05. Job.io
-    id: "Job.io",
-    category: "Full stack",
-    title: "Job.io",
-    src: "/assets/projects-screenshots/smartjobtracker/02.png",
-    screenshots: ["01.png", "02.png", "03.png","04.png","05.png","06.png","07.png"],
-    live: "https://job-io.vercel.app/",
-    github:"https://github.com/alienxviking/job.io",
+  { // 05. cook.io project
+    id: "cook.io",
+    category: "Frontend",
+    title: "cook.io",
+    src: "/assets/projects-screenshots/cook.io/1.png",
+    screenshots: ["1.png", "2.png", "3.png", "4.png"],
+    live: "https://alienxviking.github.io/cookio/",
+    github:"https://github.com/alienxviking/cookio",
     skills: {
-      frontend: [PROJECT_SKILLS.js, PROJECT_SKILLS.next, PROJECT_SKILLS.tailwind, PROJECT_SKILLS.vite],
-      backend: [PROJECT_SKILLS.firebase],
-    },
-    get content() {
-      return (
-        <div>
-          <TypographyP className="font-mono ">
-            Track your job applications effortlessly with a sleek, dark-themed app that lets you 
-            manage, filter, and visualize your job search. Organize your applications with a 
-            Kanban board, monitor progress through status updates, and store everything securely. 
-            Enjoy seamless access across devices with a responsive design and email reminders for 
-            interviews. A smarter, more intuitive way to stay on top of your job hunt!
-          </TypographyP>
-          <ProjectsLinks live={this.live} repo={this.github} />
-          <SlideShow
-            images={[
-              `${BASE_PATH}/smartjobtracker/01.png`,
-              `${BASE_PATH}/smartjobtracker/02.png`,
-              `${BASE_PATH}/smartjobtracker/03.png`,
-              `${BASE_PATH}/smartjobtracker/04.png`,
-              `${BASE_PATH}/smartjobtracker/05.png`,
-              `${BASE_PATH}/smartjobtracker/06.png`,
-              `${BASE_PATH}/smartjobtracker/07.png`,
-            ]}
-          />
-        </div>
-      );
-    },
-  },
-  { // 06. WorldAtlas
-    id: "worldatlas",
-    category: "Web Development",
-    title: "World Atlas",
-    src: "/assets/projects-screenshots/worldatlas/1.png",
-    screenshots: ["01.png", "02.png"],
-    live: "https://world-atlas-alpha.vercel.app/",
-    github:"https://github.com/alienxviking/WorldAtlas",
-    skills: {
-      frontend: [PROJECT_SKILLS.html, PROJECT_SKILLS.css, PROJECT_SKILLS.js, PROJECT_SKILLS.react, PROJECT_SKILLS.vite],
+      frontend: [PROJECT_SKILLS.js, PROJECT_SKILLS.html, PROJECT_SKILLS.css],
       backend: [],
     },
     get content() {
       return (
         <div>
           <TypographyP className="font-mono ">
-          WorldAtlas is a lightweight React application that helps users quickly find reliable facts about any country. Use the smart search to jump to country profiles with essentials like capital, population, languages, currency, map location, and notable trivia — plus side-by-side comparisons for planning, learning, or research. Designed for speed and clarity, WorldAtlas makes exploring the world feel effortless.
+          A recipe finding website that allows users to search for recipes by name, ingredients, or cuisine.
+          Built using HTML, CSS, and Vanilla JavaScript.
+          This was my first project after learning JavaScript.
           </TypographyP>
           <ProjectsLinks live={this.live} repo={this.github} />
           <SlideShow
             images={[
-              `${BASE_PATH}/worldatlas/1.png`,
-              `${BASE_PATH}/worldatlas/2.png`,
+              `${BASE_PATH}/cook.io/1.png`,
+              `${BASE_PATH}/cook.io/2.png`,
+              `${BASE_PATH}/cook.io/3.png`,
+              `${BASE_PATH}/cook.io/4.png`,
             ]}
           />
         </div>

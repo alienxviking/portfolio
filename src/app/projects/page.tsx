@@ -11,40 +11,37 @@ import "@splidejs/react-splide/css";
 const PROJECTS = [
   {
     id: 1,
-    name: "cook.io",
-    description: `A recipe finding website that allows users to search for recipes by name, ingredients, or cuisine. Built using HTML, CSS, and Vanilla JavaScript. This was my first project after learning JavaScript.`,
-    link: "https://alienxviking.github.io/cookio/",
+    name: "Mind Palace OS",
+    description: `A knowledge-visualization OS that turns notes into a living 3D neural grid. Built with Next.js, Three.js, and Supabase, it uses Google Gemini AI to auto-summarize, tag, and link your ideas.`,
+    link: "https://mind-palace-rosy.vercel.app",
     images: [
-      "/assets/projects-screenshots/cook.io/1.png",
-      "/assets/projects-screenshots/cook.io/2.png",
-      "/assets/projects-screenshots/cook.io/3.png",
-      "/assets/projects-screenshots/cook.io/4.png",
+      "/assets/projects-screenshots/mind-palace/1.png",
+      "/assets/projects-screenshots/mind-palace/2.png",
+      "/assets/projects-screenshots/mind-palace/3.png",
     ],
   },
   {
     id: 2,
-    name: "tidymind",
-    description: `TidyMind is a web application that helps users declutter their minds and stay organized. 
-            It is built using Electron JS, HTML, CSS, React and Node JS. It is an Electron Application so it won't work on the web, but only when installed locally in the device. `,
-    link: "https://tidymind-final.vercel.app/",
+    name: "Momentum",
+    description: `A social accountability platform for building better habits. Track daily habits and streaks, submit progress reports, give peer feedback, and climb a real accountability leaderboard. Built with Next.js 16 and Supabase.`,
+    link: "https://momentum-seven-flame.vercel.app",
     images: [
-      "/assets/projects-screenshots/tidymind/1.png",
-      "/assets/projects-screenshots/tidymind/2.png",
-      "/assets/projects-screenshots/tidymind/3.png",
-      "/assets/projects-screenshots/tidymind/4.png",
-      "/assets/projects-screenshots/tidymind/5.png"
+      "/assets/projects-screenshots/momentum/1.png",
+      "/assets/projects-screenshots/momentum/2.png",
+      "/assets/projects-screenshots/momentum/3.png",
+      "/assets/projects-screenshots/momentum/4.png",
     ],
   },
   {
     id: 3,
-    name: "Portfolio",
-    description: `Welcome to my digital playground, where creativity meets code in the
-            dopest way possible.`,
-    link: "https://snehangshu-roy-portfolio.vercel.app/",
+    name: "Nexo Chat",
+    description: `A real-time, premium 1-to-1 private messaging app built on WebSockets with a glassmorphism UI. Presence, read receipts, typing indicators, rich media, and message scheduling. Node.js + Socket.io + Prisma/PostgreSQL.`,
+    link: "https://nexo-navy.vercel.app",
     images: [
-      "/assets/projects-screenshots/myportfolio/landing.png",
-      "/assets/projects-screenshots/myportfolio/navbar.png",
-      "/assets/projects-screenshots/myportfolio/skills.png",
+      "/assets/projects-screenshots/nexo/1.png",
+      "/assets/projects-screenshots/nexo/2.png",
+      "/assets/projects-screenshots/nexo/3.png",
+      "/assets/projects-screenshots/nexo/4.png",
     ],
   },
   {
@@ -57,6 +54,18 @@ const PROJECTS = [
       "/assets/projects-screenshots/chess/2.png",
       "/assets/projects-screenshots/chess/3.png",
 
+    ],
+  },
+  {
+    id: 5,
+    name: "cook.io",
+    description: `A recipe finding website that allows users to search for recipes by name, ingredients, or cuisine. Built using HTML, CSS, and Vanilla JavaScript. This was my first project after learning JavaScript.`,
+    link: "https://alienxviking.github.io/cookio/",
+    images: [
+      "/assets/projects-screenshots/cook.io/1.png",
+      "/assets/projects-screenshots/cook.io/2.png",
+      "/assets/projects-screenshots/cook.io/3.png",
+      "/assets/projects-screenshots/cook.io/4.png",
     ],
   },
 ];
