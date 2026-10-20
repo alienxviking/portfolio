@@ -22,16 +22,17 @@ export default function Heatmap({ days, total, live }: { days: Day[]; total: num
     for (let w = 0; w < weeks; w++) {
       const d = cells[w * 7] ?? cells[w * 7 + 6]; if (!d) continue;
       const m = new Date(d.date + 'T00:00:00Z').getUTCMonth();
-      if (m !== last) { months.push({ col: w, label: MONTHS[m] }); last = m; }
+      if (m !== last) { if (months.length && w - months[months.length - 1].col < 3) months.pop(); months.push({ col: w, label: MONTHS[m] }); last = m; }
     }
-    let longest = 0, run = 0, active = 0, best = days[0];
-    days.forEach((d) => { if (d.count > 0) { run++; active++; longest = Math.max(longest, run); } else run = 0; if (best && d.count > best.count) best = d; });
+    let longest = 0, run = 0, active = 0;
+    days.forEach((d) => { if (d.count > 0) { run++; active++; longest = Math.max(longest, run); } else run = 0; });
+    let weeksActive = 0; for (let w = 0; w < weeks; w++) if (cells.slice(w * 7, w * 7 + 7).some((d) => d && d.count > 0)) weeksActive++;
     let current = 0; for (let i = days.length - 1; i >= 0; i--) { if (days[i].count > 0) current++; else if (i < days.length - 1) break; }
-    return { cells, weeks, months, stats: { longest, current, active, best } };
+    return { cells, weeks, months, stats: { longest, current, active, weeksActive } };
   }, [days]);
 
   return (
-    <section className="act" id="activity">
+    <section className="activity" id="activity">
       <div className="w">
         <div className="sh">
           <h2 ref={h2}>Activity</h2>
@@ -40,7 +41,7 @@ export default function Heatmap({ days, total, live }: { days: Day[]; total: num
         <div className="hm-wrap" ref={wrap} onPointerLeave={() => setTip(null)}>
           <div className={'hm' + (inView ? ' on' : '')}>
             <div className="hm-months" style={{ gridTemplateColumns: `repeat(${weeks}, 1fr)` }}>
-              {months.map((m) => <span key={m.col} style={{ gridColumn: `${m.col + 1} / span 3` }}>{m.label}</span>)}
+              {months.map((m) => <span key={m.col} style={{ gridColumn: `${m.col + 1} / span 3`, gridRow: 1 }}>{m.label}</span>)}
             </div>
             <div className="hm-grid" style={{ gridTemplateColumns: `repeat(${weeks}, 1fr)` }} role="img"
               aria-label={`${total} GitHub contributions in the last year, ${stats.active} active days, longest streak ${stats.longest} days`}>
@@ -59,7 +60,7 @@ export default function Heatmap({ days, total, live }: { days: Day[]; total: num
           <div><div className="v">{stats.active}</div><div className="l">active days out of {days.length}</div></div>
           <div><div className="v">{stats.longest} {stats.longest === 1 ? 'day' : 'days'}</div><div className="l">longest streak</div></div>
           <div><div className="v">{stats.current} {stats.current === 1 ? 'day' : 'days'}</div><div className="l">current streak</div></div>
-          <div><div className="v">{stats.best?.count ?? 0}</div><div className="l">on the busiest day, {stats.best ? fmt(stats.best.date) : ''}</div></div>
+          <div><div className="v">{stats.weeksActive}</div><div className="l">weeks with commits, out of {weeks}</div></div>
         </div>
       </div>
     </section>
