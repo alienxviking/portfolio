@@ -1,12 +1,33 @@
 /* eslint-disable @next/next/no-img-element */
 import { OB } from '@/lib/scene';
+import Terminal, { type Line } from './Terminal';
 
 function QuantFig() {
   const rows: [string, string, string, string?][] = [
     ['BTCUSDT', '', '', 'sym'], ['fills', '824', '824'], ['cash', '31.64743842', '31.64743842'], ['realized', '+0.7312598', '+0.7312598'], ['fees', '69.08382138', '69.08382138'],
     ['ETHUSDT', '', '', 'sym'], ['fills', '822', '822'], ['cash', '97.65757574', '97.65757574'], ['realized', '−0.1335', '−0.1335'], ['fees', '2.20892426', '2.20892426'],
   ];
+  const lines: Line[] = [
+    { t: 'verify ~/paper', kind: 'cmd' },
+    { t: 'sessions  4 in 32 segments', kind: 'dim' },
+    { t: 'frames    97937822 (97937124 stream, 664 snapshot, 34 gap)' },
+    { t: 'streams   23111598 depth deltas, 74825526 trades', kind: 'dim' },
+    { t: 'missing   0 messages accounted for by sequence holes' },
+    { t: 'findings  none' },
+    { t: 'verdict   every discontinuity is explained by a record in the capture', kind: 'ok' },
+    { t: '', kind: 'blank' },
+    { t: 'reconcile ~/paper/paper-BTCUSDT.jsonl', kind: 'cmd' },
+    { t: 'recomputed from the journal alone:', kind: 'dim' },
+    { t: '  cash           31.64743842' },
+    { t: '  realized       0.7312598' },
+    { t: '  fees           69.08382138' },
+    { t: '  fills          824 (824 journalled)' },
+    { t: 'arithmetic  cash moved -68.35256158 = realized 0.7312598 less fees 69.08382138', kind: 'dim' },
+    { t: "verdict   AGREES: the engine's checkpoint matches this recompute", kind: 'ok' },
+  ];
   return (
+    <>
+    <Terminal title="quant · end of the M5 paper run" note="Recorded output from the run, 2 Oct 2026 (excerpt; the capture path is shortened)." lines={lines} />
     <div className="card">
       <h3>M5 · 14-day live paper run vs backtest over the same window · 18 Sep – 2 Oct 2026</h3>
       <table className="tbl">
@@ -15,6 +36,7 @@ function QuantFig() {
       </table>
       <div className="eqok">Identical on both symbols, to the satoshi</div>
     </div>
+    </>
   );
 }
 

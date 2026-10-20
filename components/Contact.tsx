@@ -14,6 +14,7 @@ export default function Contact() {
       <div className="w">
         <motion.div className="lbl" style={{ marginBottom: 18 }} {...rise}>Contact</motion.div>
         <motion.h2 ref={h2} {...rise}>Have something hard to build? <span>Let&apos;s talk.</span></motion.h2>
+        <motion.p className="when" {...rise}>Remote, from Bengaluru · IST (UTC+5:30) · overlaps the European working day and US East Coast mornings</motion.p>
         <motion.div className="mailrow" {...rise}>
           <span className="addr" id="addr">{SITE.email}</span>
           <CopyEmail primary />

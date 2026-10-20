@@ -23,8 +23,8 @@ function Odo({ value }: { value: string }) {
 }
 
 const ITEMS: { v: string; u?: string; pre?: string; d: string; sm?: boolean }[] = [
-  { v: '797', d: 'tests in quant, passing in debug and release' },
-  { v: '97.9', u: 'M', d: 'market-data frames captured, none missing' },
+  { v: '12', d: 'projects on this page, from a trading engine to RAG tools' },
+  { v: '5', d: 'languages across them: Rust, C++, Python, TypeScript, Java' },
   { v: '38.3', u: 'ns', d: 'median cancel in my C++ order book' },
   { v: '0.00000000', pre: 'Δ ', d: 'paper vs backtest P&L after 14 live days', sm: true },
 ];

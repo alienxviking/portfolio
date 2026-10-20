@@ -149,4 +149,4 @@ export const MORE = [
   { name: 'NotebookLM clone', desc: 'Chat with your PDFs, with answers grounded through retrieval.', tech: 'Next.js · Gemini · RAG', acc: 'var(--teal)', live: 'https://note-book-llm-ten.vercel.app', code: 'https://github.com/alienxviking/NoteBook-LLM', shot: 'notebook' },
 ];
 
-export const WORDS = ['trading systems', 'AI tools', 'search engines', 'backends', 'order books'];
+export const WORDS = ['trading systems', 'AI tools', 'real-time backends', 'search pipelines'];

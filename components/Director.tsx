@@ -7,11 +7,11 @@ import { scene, type Shape } from '@/lib/scene';
 export function HomeDirector() {
   useEffect(() => {
     scene.dim = 1;
-    const ids: [string, Shape][] = [['home', 'depth'], ['work', 'quant'], ['index', 'sphere'], ['journey', 'sphere'], ['activity', 'sphere'], ['about', 'sphere'], ['contact', 'burst']];
+    const ids: [string, Shape][] = [['home', 'depth'], ['about', 'sphere'], ['work', 'quant'], ['projects', 'sphere'], ['journey', 'sphere'], ['contact', 'burst']];
     const update = () => {
       const mid = innerHeight * 0.45; let shape: Shape = 'depth', at = 'home';
       ids.forEach(([id, sh]) => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < mid) { shape = sh; at = id; } });
-      scene.dim = at === 'journey' || at === 'activity' ? 0.4 : 1;
+      scene.dim = at === 'journey' || at === 'about' ? 0.45 : 1;
       if (scene.workIdx >= 0) shape = FEATURED[scene.workIdx].shape;
       scene.shape = shape;
     };

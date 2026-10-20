@@ -1,12 +1,11 @@
 import Hero from '@/components/Hero';
 import Numbers from '@/components/Numbers';
+import About from '@/components/About';
 import WorkStage from '@/components/WorkStage';
 import MoreWork from '@/components/MoreWork';
-import About from '@/components/About';
+import Journey from '@/components/Journey';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
-import Journey from '@/components/Journey';
-import Activity from '@/components/Activity';
 import { HomeDirector } from '@/components/Director';
 
 export default function Home() {
@@ -16,11 +15,10 @@ export default function Home() {
       <main>
         <Hero />
         <Numbers />
+        <About />
         <WorkStage />
         <MoreWork />
         <Journey />
-        <Activity />
-        <About />
         <Contact />
       </main>
       <Footer />

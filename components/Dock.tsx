@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { useEffect, useState, type ReactNode } from 'react';
 
 const ITEMS = [
-  ['home', 'Home'], ['work', 'Work'], ['index', 'Index'], ['about', 'About'], ['contact', 'Contact'],
+  ['home', 'Home'], ['about', 'About'], ['work', 'Work'], ['projects', 'Projects'], ['contact', 'Contact'],
 ] as const;
 const SPRING = { type: 'spring', stiffness: 420, damping: 36 } as const;
 

@@ -16,10 +16,10 @@ export default function MoreWork() {
   const m = hov === null ? null : MORE[hov];
 
   return (
-    <section className="idx" id="index" onPointerMove={(e) => { x.set(e.clientX + 22); y.set(e.clientY + 18); }}>
+    <section className="idx" id="projects" onPointerMove={(e) => { x.set(e.clientX + 22); y.set(e.clientY + 18); }}>
       <div className="w">
         <div className="sh">
-          <h2 ref={h2}>More work</h2>
+          <h2 ref={h2}>More projects</h2>
           <span className="lbl">Eight smaller builds · hover for a preview</span>
         </div>
         <div className="rows">
