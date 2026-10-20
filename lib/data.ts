@@ -9,6 +9,7 @@ export const SITE = {
   linkedin: 'https://www.linkedin.com/in/snehangshu-roy/',
   x: 'https://x.com/SnehangshuRoy15',
   url: 'https://snehangshu-roy-portfolio.vercel.app',
+  resume: '/resume/Snehangshu-Roy-Resume.pdf',
 };
 
 export type Section = { h: string; p?: string[]; list?: string[] };

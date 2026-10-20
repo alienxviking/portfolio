@@ -17,6 +17,7 @@ export default function Contact() {
         <motion.div className="mailrow" {...rise}>
           <span className="addr" id="addr">{SITE.email}</span>
           <CopyEmail primary />
+          <a className="b" href={SITE.resume} target="_blank" rel="noopener">Download résumé <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" /></svg></a>
         </motion.div>
         <motion.div className="soc" {...rise}>
           <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>

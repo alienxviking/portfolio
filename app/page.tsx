@@ -5,6 +5,8 @@ import MoreWork from '@/components/MoreWork';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import Journey from '@/components/Journey';
+import Activity from '@/components/Activity';
 import { HomeDirector } from '@/components/Director';
 
 export default function Home() {
@@ -16,6 +18,8 @@ export default function Home() {
         <Numbers />
         <WorkStage />
         <MoreWork />
+        <Journey />
+        <Activity />
         <About />
         <Contact />
       </main>

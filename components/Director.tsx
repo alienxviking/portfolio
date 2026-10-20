@@ -7,7 +7,7 @@ import { scene, type Shape } from '@/lib/scene';
 export function HomeDirector() {
   useEffect(() => {
     scene.dim = 1;
-    const ids: [string, Shape][] = [['home', 'depth'], ['work', 'quant'], ['index', 'sphere'], ['about', 'sphere'], ['contact', 'burst']];
+    const ids: [string, Shape][] = [['home', 'depth'], ['work', 'quant'], ['index', 'sphere'], ['journey', 'sphere'], ['activity', 'sphere'], ['about', 'sphere'], ['contact', 'burst']];
     const update = () => {
       const mid = innerHeight * 0.45; let shape: Shape = 'depth';
       ids.forEach(([id, sh]) => { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top < mid) shape = sh; });

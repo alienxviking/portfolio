@@ -1,7 +1,7 @@
 'use client';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { WORDS } from '@/lib/data';
+import { SITE, WORDS } from '@/lib/data';
 import { startGrains } from '@/lib/grains';
 import CopyEmail from './CopyEmail';
 import { MagneticLink } from './Magnetic';
@@ -53,6 +53,7 @@ export default function Hero() {
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
               </MagneticLink>
               <CopyEmail />
+              <MagneticLink className="b" href={SITE.resume} target="_blank" rel="noopener">Résumé <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" /></svg></MagneticLink>
             </div>
           </motion.div>
           <motion.div className="now" {...up(0.5)}>

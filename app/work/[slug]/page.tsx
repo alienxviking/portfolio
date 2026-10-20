@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FEATURED } from '@/lib/data';
 import CaseFigure from '@/components/CaseFigure';
+import Diagram from '@/components/Diagram';
 import Footer from '@/components/Footer';
 import { CaseDirector } from '@/components/Director';
 
@@ -45,6 +46,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
             </div>
           </header>
           <dl className="meta">{p.meta.map(([dt, dd]) => <div key={dt}><dt>{dt}</dt><dd>{dd}</dd></div>)}</dl>
+          <Diagram kind={p.slug} />
           <div className="case-body">
             <div className="text">
               {p.sections.map((s) => (
