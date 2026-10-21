@@ -22,5 +22,7 @@ export const scene = {
   len: [201.6 / 471.2, 1, 38.3 / 471.2],
   sift: 'fused' as SiftMode,
   onRace: null as null | ((text: string | null) => void),
+  // live BTCUSDT book: cumulative qty at 0..20 levels from the touch, normalised so the deeper side ends at 1
+  book: { live: false, bids: new Float32Array(21), asks: new Float32Array(21) },
   workIdx: -1, // which featured project the home stage is showing (-1 = stage not active)
 };

@@ -72,15 +72,20 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
     return a.map((x) => (x - mn) / (mx - mn));
   })();
   const eqAt = (u: number) => { const f = u * 300, i = Math.min(299, Math.floor(f)), t = f - i; return EQ[i] + (EQ[i + 1] - EQ[i]) * t; };
-  let ripX = 9, ripZ = 9;
+  let ripX = 9, ripZ = 9, liveMix = 0;
+  const bS = new Float32Array(21), aS = new Float32Array(21);
+  const curve = (arr: Float32Array, u: number) => { const f = u * 20, i = Math.min(19, Math.floor(f)), t = f - i; return arr[i] + (arr[i + 1] - arr[i]) * t; };
   let raceTick = 0;
 
   const shapes: Record<Shape, (t: number) => void> = {
     depth(t) {
+      if (S.book.live) { for (let k = 0; k < 21; k++) { bS[k] += (S.book.bids[k] - bS[k]) * 0.12; aS[k] += (S.book.asks[k] - aS[k]) * 0.12; } liveMix += (1 - liveMix) * 0.03; }
+      else liveMix *= 0.97;
       const GW = small ? 120 : 180, GH = Math.max(2, Math.floor(N / GW));
       for (let i = 0; i < N; i++) {
         const gx = i % GW, gz = Math.min(GH - 1, Math.floor(i / GW)), x = -3.2 + 6.4 * gx / (GW - 1), z = -1.8 + 3.6 * gz / (GH - 1), d = Math.abs(x);
-        const depth = d < 0.07 ? 0 : 0.12 + 1.15 * Math.pow((d - 0.07) / 3.1, 0.62);
+        const u = Math.min(1, (d - 0.07) / 3.1), sim = Math.pow(Math.max(0, u), 0.62);
+        const depth = d < 0.07 ? 0 : 0.12 + 1.15 * (liveMix > 0.001 ? liveMix * curve(x < 0 ? bS : aS, u) + (1 - liveMix) * sim : sim);
         const wob = 0.07 * Math.sin(z * 3.6 + t * 1.1 + x * 1.7) + 0.045 * Math.sin(x * 7.0 - t * 0.9 + z) + 0.03 * Math.sin((x + z) * 11.0 + t * 2.2);
         const rr = Math.hypot(x - ripX, z - ripZ), rip = 0.32 * Math.exp(-rr * rr * 1.6) * Math.sin(rr * 9.0 - t * 7.0);
         const y = depth * (0.85 + 0.15 * Math.sin(z * 1.3 + t * 0.6)) + wob + rip - 0.9, h = Math.min(1, depth + 0.25), dm = 0.62;
