@@ -41,6 +41,20 @@ function useWeightWave(h1: React.RefObject<HTMLHeadingElement | null>) {
     const chars = Array.from(el.querySelectorAll<HTMLElement>('.ch'));
     const cur = chars.map(() => 600);
     let mx = -1e5, my = -1e5, raf = 0;
+    // Give every letter a fixed slot (its width at the base weight) so a heavier
+    // letter grows in place instead of pushing the rest of the name along.
+    const lock = () => {
+      chars.forEach((c) => { c.style.cssText = ''; });
+      const ls = parseFloat(getComputedStyle(el).letterSpacing) || 0;
+      const widths = chars.map((c) => c.getBoundingClientRect().width);
+      chars.forEach((c, i) => {
+        Object.assign(c.style, { display: 'inline-block', width: `${widths[i] - ls}px`, marginRight: `${ls}px`, letterSpacing: '0', textAlign: 'center', fontWeight: String(Math.round(cur[i])) });
+      });
+    };
+    let rt = 0;
+    const onResize = () => { clearTimeout(rt); rt = window.setTimeout(() => { cur.fill(600); lock(); }, 150); };
+    (document.fonts?.ready ?? Promise.resolve()).then(lock);
+    addEventListener('resize', onResize);
     const move = (e: PointerEvent) => { mx = e.clientX; my = e.clientY; };
     addEventListener('pointermove', move, { passive: true });
     const loop = () => {
@@ -48,7 +62,7 @@ function useWeightWave(h1: React.RefObject<HTMLHeadingElement | null>) {
         const reach = el.getBoundingClientRect().height * 1.25;
         chars.forEach((c, i) => {
           const r = c.getBoundingClientRect(), d = Math.hypot(r.left + r.width / 2 - mx, r.top + r.height / 2 - my);
-          const target = 600 + 300 * Math.exp(-((d / reach) ** 2));
+          const target = 600 + 220 * Math.exp(-((d / reach) ** 2));
           cur[i] += (target - cur[i]) * 0.16;
           const v = Math.round(cur[i]);
           if (c.style.fontWeight !== String(v)) c.style.fontWeight = String(v);
@@ -57,7 +71,7 @@ function useWeightWave(h1: React.RefObject<HTMLHeadingElement | null>) {
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); removeEventListener('pointermove', move); };
+    return () => { cancelAnimationFrame(raf); clearTimeout(rt); removeEventListener('pointermove', move); removeEventListener('resize', onResize); };
   }, [h1]);
 }
 

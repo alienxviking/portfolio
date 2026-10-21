@@ -33,7 +33,8 @@ export function startGrains(h1: HTMLElement, cv: HTMLCanvasElement, opts: { intr
       w.querySelectorAll<HTMLElement>('.ch').forEach((c) => {
         const cr = c.getBoundingClientRect(), wgt = Math.round(parseFloat(c.style.fontWeight || '600'));
         o.font = `${wgt} ${fs}px ${cs.fontFamily}`;
-        o.fillText(c.textContent || '', (cr.left - r.left + PAD) * dpr, y0);
+        const ch = c.textContent || '', gw = o.measureText(ch).width;
+        o.fillText(ch, (cr.left - r.left + PAD) * dpr + (c.style.width ? (cr.width * dpr - gw) / 2 : 0), y0);
       });
     });
     const id = o.getImageData(0, 0, W, H);

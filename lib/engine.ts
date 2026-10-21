@@ -73,6 +73,7 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
   })();
   const eqAt = (u: number) => { const f = u * 300, i = Math.min(299, Math.floor(f)), t = f - i; return EQ[i] + (EQ[i + 1] - EQ[i]) * t; };
   let ripX = 9, ripZ = 9, liveMix = 0;
+  const HOVER_LEVELS = 6; // the readout only covers the levels nearest the spread
   const bS = new Float32Array(21), aS = new Float32Array(21);
   const curve = (arr: Float32Array, u: number) => { const f = u * 20, i = Math.min(19, Math.floor(f)), t = f - i; return arr[i] + (arr[i + 1] - arr[i]) * t; };
   let raceTick = 0;
@@ -217,7 +218,7 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
           const px = o.x + dir.x * s, py = o.y + dir.y * s, pz = o.z + dir.z * s, ax = Math.abs(px);
           if (ax > 3.4 || Math.abs(pz) > 2) { if (py < -1.2) break; continue; }
           const uu = Math.min(1, Math.max(0, (ax - 0.07) / 3.1)), surf = ax < 0.07 ? -0.9 : 0.12 + 1.15 * curve(px < 0 ? bS : aS, uu) - 0.9;
-          if (py <= surf + 0.03) { if (ax >= 0.07 && ax <= 3.2) S.hover = { side: px < 0 ? 'bid' : 'ask', lvl: Math.min(19, Math.floor(uu * 20)) }; break; }
+          if (py <= surf + 0.03) { const lvl = Math.floor(uu * 20); if (ax >= 0.07 && lvl < HOVER_LEVELS) S.hover = { side: px < 0 ? 'bid' : 'ask', lvl }; break; }
         }
       }
     }
