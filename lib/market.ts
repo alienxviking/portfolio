@@ -37,6 +37,12 @@ export function startMarket(onStatus: (s: MarketStatus) => void) {
       if (!d.bids?.length || !d.asks?.length) return;
       const tb = cumulative(d.bids, bids), ta = cumulative(d.asks, asks), max = Math.max(tb, ta) || 1;
       for (let i = 0; i < 21; i++) { scene.book.bids[i] = bids[i] / max; scene.book.asks[i] = asks[i] / max; }
+      const b = scene.book;
+      for (let i = 0; i < 20; i++) {
+        const bl = d.bids[i], al = d.asks[i];
+        b.bp[i] = bl ? parseFloat(bl[0]) : 0; b.bq[i] = bl ? parseFloat(bl[1]) : 0; b.bc[i] = bids[i + 1];
+        b.ap[i] = al ? parseFloat(al[0]) : 0; b.aq[i] = al ? parseFloat(al[1]) : 0; b.ac[i] = asks[i + 1];
+      }
       scene.book.live = true; gotData = true;
       const mid = (parseFloat(d.bids[0][0]) + parseFloat(d.asks[0][0])) / 2;
       onStatus({ state: 'live', mid, ts: Date.now(), levels: Math.min(d.bids.length, d.asks.length) });

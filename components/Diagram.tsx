@@ -131,6 +131,7 @@ export default function Diagram({ kind }: { kind: string }) {
           )}
         </div>
         {m && <p className="lbl" style={{ margin: '0 0 8px' }}>{m.note}</p>}
+        <p className="dhint lbl">Swipe to see the whole diagram →</p>
         <div className="dscroll">
           <svg viewBox={d.vb} role="img" aria-label={`${d.title}: ${d.nodes.map((n) => n.t).join(', ')}`}>
             {d.edges.map((e) => <path key={e.id} d={e.d} className={'de' + (onEdges.has(e.id) ? ' on' : '') + (e.dash ? ' dash' : '')} />)}

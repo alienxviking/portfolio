@@ -6,6 +6,7 @@ import { startGrains } from '@/lib/grains';
 import { startMarket, type MarketStatus } from '@/lib/market';
 import CopyEmail from './CopyEmail';
 import { MagneticLink } from './Magnetic';
+import BookReadout from './BookReadout';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const NAME = ['Snehangshu', 'Roy'];
@@ -85,8 +86,8 @@ export default function Hero() {
     const startTicker = () => {
       setIntroDone(true);
       timer = window.setInterval(() => {
-        if (market.state === 'live') show(`BTCUSDT ${fmtPrice(market.mid)} · book updated ${Math.max(0, Date.now() - market.ts)} ms ago · live`, 'live');
-        else if (market.state === 'replay') show('BTCUSDT · replay · the live feed is not reachable from here', 'replay');
+        if (market.state === 'live') show(innerWidth < 640 ? `BTCUSDT ${fmtPrice(market.mid)} · live order book` : `BTCUSDT ${fmtPrice(market.mid)} · book updated ${Math.max(0, Date.now() - market.ts)} ms ago · live`, 'live');
+        else if (market.state === 'replay') show(innerWidth < 640 ? 'BTCUSDT · replay' : 'BTCUSDT · replay · the live feed is not reachable from here', 'replay');
         else show('BTCUSDT · connecting…', 'wait');
       }, 100);
     };
@@ -117,6 +118,7 @@ export default function Hero() {
   const up = (d: number) => ({ initial: { opacity: 0, y: 14 }, animate: introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }, transition: { duration: 0.8, ease: EASE, delay: d } });
   return (
     <section className="hero" id="home">
+      <BookReadout />
       <div className="w">
         <div className="eyebrow">
           <motion.span className="lbl" {...up(0.05)}>Systems + AI engineer · Bengaluru</motion.span>

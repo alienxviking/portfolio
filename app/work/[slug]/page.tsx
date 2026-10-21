@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { FEATURED } from '@/lib/data';
 import CaseFigure from '@/components/CaseFigure';
 import Diagram from '@/components/Diagram';
+import CaseTitle from '@/components/CaseTitle';
 import Footer from '@/components/Footer';
 import { CaseDirector } from '@/components/Director';
 
@@ -34,7 +35,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
           </Link>
           <header className="case-head">
             <div className="k"><b>{p.n} / 04</b><span className="lbl">{p.tag}</span></div>
-            <h1>{p.title}</h1>
+            <CaseTitle text={p.title} />
             <p className="th">{p.th}</p>
             <div className="links" style={{ marginTop: 28 }}>
               {p.links.map(([label, href], k) => (

@@ -6,6 +6,7 @@ import { FEATURED } from '@/lib/data';
 import { OB, scene, type Op, type SiftMode } from '@/lib/scene';
 import { scrollToY } from '@/lib/lenis';
 import { scramble } from './useScramble';
+import { captureTitle } from '@/lib/morph';
 
 const SPRING = { type: 'spring', stiffness: 420, damping: 36 } as const;
 
@@ -47,6 +48,12 @@ export default function WorkStage() {
     addEventListener('resize', onScroll);
     return () => { document.removeEventListener('scroll', onScroll, { capture: true }); removeEventListener('resize', onScroll); scene.workIdx = -1; };
   }, []);
+
+  // keep the active tab visible when the tab strip scrolls (phones)
+  useEffect(() => {
+    const strip = sec.current?.querySelector<HTMLElement>('.tabs'), btn = strip?.querySelectorAll<HTMLElement>('[role=tab]')[idx];
+    if (strip && btn && strip.scrollWidth > strip.clientWidth) strip.scrollTo({ left: btn.offsetLeft - strip.clientWidth / 2 + btn.offsetWidth / 2, behavior: 'smooth' });
+  }, [idx]);
 
   useEffect(() => {
     // the new title mounts after the old one finishes exiting
@@ -97,7 +104,7 @@ export default function WorkStage() {
                   <p className="bd" key="bd">{p.bd}</p>,
                   <div className="stats" key="st">{p.stats.map(([v, l]) => <div key={l}><div className="v">{v}</div><div className="l">{l}</div></div>)}</div>,
                   <div className="links" key="ln">
-                    <Link className="b p" href={`/work/${p.slug}`}>Read the case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg></Link>
+                    <Link className="b p" href={`/work/${p.slug}`} onClick={() => captureTitle(title.current)}>Read the case study <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg></Link>
                     {p.links.map(([label, href]) => <a key={href} className="b" href={href} target="_blank" rel="noopener noreferrer">{label} <Arrow /></a>)}
                   </div>,
                 ].map((child, k) => (

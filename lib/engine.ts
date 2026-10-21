@@ -88,7 +88,8 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
         const depth = d < 0.07 ? 0 : 0.12 + 1.15 * (liveMix > 0.001 ? liveMix * curve(x < 0 ? bS : aS, u) + (1 - liveMix) * sim : sim);
         const wob = 0.07 * Math.sin(z * 3.6 + t * 1.1 + x * 1.7) + 0.045 * Math.sin(x * 7.0 - t * 0.9 + z) + 0.03 * Math.sin((x + z) * 11.0 + t * 2.2);
         const rr = Math.hypot(x - ripX, z - ripZ), rip = 0.32 * Math.exp(-rr * rr * 1.6) * Math.sin(rr * 9.0 - t * 7.0);
-        const y = depth * (0.85 + 0.15 * Math.sin(z * 1.3 + t * 0.6)) + wob + rip - 0.9, h = Math.min(1, depth + 0.25), dm = 0.62;
+        const hv = S.hover, lit = hv && d >= 0.07 && (x < 0) === (hv.side === 'bid') && Math.min(19, Math.floor(u * 20)) === hv.lvl;
+        const y = depth * (0.85 + 0.15 * Math.sin(z * 1.3 + t * 0.6)) + wob + rip - 0.9 + (lit ? 0.04 : 0), h = Math.min(1, depth + 0.25), dm = lit ? 1.7 : 0.62;
         if (d < 0.07) set(i, x, y, z, 0.7, 0.7, 0.75);
         else if (x < 0) set(i, x, y, z, (0.16 + 0.2 * h) * dm, (0.55 + 0.4 * h) * dm, (0.5 + 0.3 * h) * dm);
         else set(i, x, y, z, (0.6 + 0.4 * h) * dm, (0.18 + 0.2 * h) * dm, (0.26 + 0.2 * h) * dm);
@@ -195,8 +196,8 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
   const look = new THREE.Vector3(0, -0.4, 0), ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.6), hit = new THREE.Vector3();
   const resize = () => { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); };
   addEventListener('resize', resize); resize();
-  let nmx = 0, nmy = 0;
-  const onMove = (e: PointerEvent) => { nmx = e.clientX / innerWidth * 2 - 1; nmy = e.clientY / innerHeight * 2 - 1; };
+  let nmx = 0, nmy = 0, hovering = false;
+  const onMove = (e: PointerEvent) => { nmx = e.clientX / innerWidth * 2 - 1; nmy = e.clientY / innerHeight * 2 - 1; hovering = e.pointerType === 'mouse'; };
   addEventListener('pointermove', onMove);
 
   const t0 = performance.now();
@@ -205,8 +206,22 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
     const shape = S.shape;
     if (shape === 'depth') {
       ray.setFromCamera(new THREE.Vector2(nmx, -nmy), camera);
-      if (ray.ray.intersectPlane(plane, hit)) { ripX += (hit.x - ripX) * 0.12; ripZ += (hit.z - ripZ) * 0.12; }
+      S.hover = null;
+      if (ray.ray.intersectPlane(plane, hit)) {
+        ripX += (hit.x - ripX) * 0.12; ripZ += (hit.z - ripZ) * 0.12;
+      }
+      if (hovering && liveMix > 0.5) {
+        // march along the cursor ray until it dips under the landscape surface
+        const o = ray.ray.origin, dir = ray.ray.direction;
+        for (let s = 2; s < 14; s += 0.05) {
+          const px = o.x + dir.x * s, py = o.y + dir.y * s, pz = o.z + dir.z * s, ax = Math.abs(px);
+          if (ax > 3.4 || Math.abs(pz) > 2) { if (py < -1.2) break; continue; }
+          const uu = Math.min(1, Math.max(0, (ax - 0.07) / 3.1)), surf = ax < 0.07 ? -0.9 : 0.12 + 1.15 * curve(px < 0 ? bS : aS, uu) - 0.9;
+          if (py <= surf + 0.03) { if (ax >= 0.07 && ax <= 3.2) S.hover = { side: px < 0 ? 'bid' : 'ask', lvl: Math.min(19, Math.floor(uu * 20)) }; break; }
+        }
+      }
     }
+    else S.hover = null;
     shapes[shape](t);
     for (let i = 0, j = 0; i < N; i++, j += 3) {
       const s = reduce ? 1 : spd[i];

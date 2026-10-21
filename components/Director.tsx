@@ -26,7 +26,7 @@ export function HomeDirector() {
 // Case-study pages: hold the project's shape, dimmed so the text leads.
 export function CaseDirector({ shape }: { shape: Shape }) {
   useEffect(() => {
-    scene.shape = shape; scene.dim = 0.5; scene.conv = 1; scene.marksT = 1; scene.race = null;
+    scene.shape = shape; scene.dim = innerWidth < 900 ? 0.2 : 0.5; scene.conv = 1; scene.marksT = 1; scene.race = null;
     return () => { scene.dim = 1; };
   }, [shape]);
   return null;

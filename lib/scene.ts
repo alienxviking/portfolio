@@ -23,6 +23,10 @@ export const scene = {
   sift: 'fused' as SiftMode,
   onRace: null as null | ((text: string | null) => void),
   // live BTCUSDT book: cumulative qty at 0..20 levels from the touch, normalised so the deeper side ends at 1
-  book: { live: false, bids: new Float32Array(21), asks: new Float32Array(21) },
+  book: { live: false, bids: new Float32Array(21), asks: new Float32Array(21),
+    // raw levels for the hover readout: price, size, cumulative size (BTC), best first
+    bp: new Float64Array(20), bq: new Float64Array(20), bc: new Float64Array(20),
+    ap: new Float64Array(20), aq: new Float64Array(20), ac: new Float64Array(20) },
+  hover: null as null | { side: 'bid' | 'ask'; lvl: number },
   workIdx: -1, // which featured project the home stage is showing (-1 = stage not active)
 };
