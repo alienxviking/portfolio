@@ -7,7 +7,7 @@ import { startMarket, type MarketStatus } from '@/lib/market';
 import { scene } from '@/lib/scene';
 import CopyEmail from './CopyEmail';
 import { MagneticLink } from './Magnetic';
-import BookReadout from './BookReadout';
+import Crosshair from './Crosshair';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const NAME = ['Snehangshu', 'Roy'];
@@ -158,7 +158,7 @@ export default function Hero() {
   const up = (d: number) => ({ initial: { opacity: 0, y: 14 }, animate: introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }, transition: { duration: 0.8, ease: EASE, delay: d } });
   return (
     <section className="hero" id="home">
-      <BookReadout />
+      <Crosshair />
       <div className="w">
         <div className="eyebrow">
           <motion.span className="lbl" {...up(0.05)}>Systems + AI engineer · Bengaluru</motion.span>

@@ -4,6 +4,7 @@ import Field from '@/components/Field';
 import SmoothScroll from '@/components/SmoothScroll';
 import TopBar from '@/components/TopBar';
 import Dock from '@/components/Dock';
+import Hints from '@/components/Hints';
 import { SITE } from '@/lib/data';
 import './globals.css';
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <TopBar />
         {children}
         <Dock />
+        <Hints />
       </body>
     </html>
   );

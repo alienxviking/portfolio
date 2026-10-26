@@ -97,6 +97,18 @@ export default function WorkStage() {
     scrollToY(el.offsetTop + span * (i + 0.5) / 4);
   }
 
+  const NEXT_SIFT: Record<SiftMode, [SiftMode, string]> = { kw: ['se', 'semantic only'], se: ['fused', 'fused'], fused: ['kw', 'keyword only'] };
+  const vizHint = p.slug === 'quant' ? 'click to replay'
+    : p.slug === 'redpen' ? (marked ? 'click for the clean copy' : 'click to mark it')
+      : p.slug === 'order-book' ? (bench === 'idle' ? 'click to run on your CPU' : bench === 'running' ? 'measuring…' : 'click to race again')
+        : `click: ${NEXT_SIFT[sift][1]}`;
+  function vizClick() {
+    if (p.slug === 'quant') replay();
+    else if (p.slug === 'redpen') { setMarked(!marked); scene.marksT = marked ? 0 : 1; }
+    else if (p.slug === 'order-book') { if (bench === 'idle') measure(); else if (bench !== 'running') { setBenchMsg(null); scene.race = { t0: performance.now() }; } }
+    else { const n = NEXT_SIFT[sift][0]; setSift(n); scene.sift = n; }
+  }
+
   const o = (scene.measured ?? OB)[op];
   const readout =
     p.slug === 'quant' ? 'BTCUSDT fills 824 = 824 · ETHUSDT 822 = 822'
@@ -138,7 +150,8 @@ export default function WorkStage() {
                 ))}
               </motion.div>
             </AnimatePresence>
-            <div className="viz">
+            {/* the visual itself is clickable: it does what that project's control does */}
+            <div className="viz" data-hint={vizHint} onClick={(e) => { if (!(e.target as Element).closest('.ctl')) vizClick(); }}>
               <div className="readout" aria-live="polite">{readout}</div>
               <motion.div className="ctl" key={p.slug} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={SPRING}>
                 {p.slug === 'quant' && (
