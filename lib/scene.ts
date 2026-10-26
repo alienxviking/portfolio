@@ -31,5 +31,10 @@ export const scene = {
     bp: new Float64Array(20), bq: new Float64Array(20), bc: new Float64Array(20),
     ap: new Float64Array(20), aq: new Float64Array(20), ac: new Float64Array(20) },
   hover: null as null | { side: 'bid' | 'ask'; lvl: number },
+  // live trades waiting to ripple across the book (amp 0..1, t = performance.now())
+  pulses: [] as { side: 'bid' | 'ask'; amp: number; t: number }[],
+  // a click on the book, in normalised screen coords, for the engine to resolve into a level
+  fire: null as null | { nx: number; ny: number },
+  onSweep: null as null | ((side: 'bid' | 'ask', lvl: number) => void),
   workIdx: -1, // which featured project the home stage is showing (-1 = stage not active)
 };

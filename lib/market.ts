@@ -2,9 +2,11 @@
 // Writes cumulative depth into the shared scene so the hero landscape is the real book.
 import { scene } from './scene';
 
+// one socket for both the book and the trade tape
+const STREAMS = 'stream?streams=btcusdt@depth20@100ms/btcusdt@aggTrade';
 const ENDPOINTS = [
-  'wss://data-stream.binance.vision/ws/btcusdt@depth20@100ms',
-  'wss://stream.binance.com:9443/ws/btcusdt@depth20@100ms',
+  `wss://data-stream.binance.vision/${STREAMS}`,
+  `wss://stream.binance.com:9443/${STREAMS}`,
 ];
 
 export type MarketStatus =
@@ -13,6 +15,23 @@ export type MarketStatus =
   | { state: 'replay' };
 
 type Level = [string, string];
+
+// Trades become pulses on the side they hit: a buyer lifting offers hits the asks.
+// Trades a few ms apart on the same side are merged so a burst reads as one bigger pulse.
+let pend = { side: 'ask' as 'bid' | 'ask', qty: 0, t: 0 };
+function onTrade(qty: number, buyerIsMaker: boolean) {
+  if (scene.shape !== 'depth' || !scene.book.live) return; // hero off screen: nothing to draw
+  const side = buyerIsMaker ? 'bid' : 'ask', now = performance.now();
+  if (side === pend.side && now - pend.t < 120) { pend.qty += qty; return; }
+  if (pend.qty > 0) push(pend.side, pend.qty, pend.t);
+  pend = { side, qty, t: now };
+}
+function push(side: 'bid' | 'ask', qty: number, t: number) {
+  if (qty < 0.0005) return; // dust (about $40)
+  const amp = Math.min(1, Math.max(0.2, Math.log10(qty * 1000) / 4)); // small trades faint, 10 BTC full
+  if (scene.pulses.length >= 24) scene.pulses.shift();
+  scene.pulses.push({ side, amp, t });
+}
 
 function cumulative(levels: Level[], out: Float32Array) {
   out[0] = 0;
@@ -32,8 +51,11 @@ export function startMarket(onStatus: (s: MarketStatus) => void) {
     if (closed || idx >= ENDPOINTS.length) { if (!gotData) onStatus({ state: 'replay' }); return; }
     try { ws = new WebSocket(ENDPOINTS[idx]); } catch { idx++; connect(); return; }
     ws.onmessage = (e) => {
-      let d: { bids?: Level[]; asks?: Level[] };
-      try { d = JSON.parse(e.data as string); } catch { return; }
+      let msg: { stream?: string; data?: { bids?: Level[]; asks?: Level[]; q?: string; m?: boolean } };
+      try { msg = JSON.parse(e.data as string); } catch { return; }
+      const d = msg.data;
+      if (!d) return;
+      if (msg.stream?.endsWith('aggTrade')) { onTrade(parseFloat(d.q ?? '0'), !!d.m); return; }
       if (!d.bids?.length || !d.asks?.length) return;
       const tb = cumulative(d.bids, bids), ta = cumulative(d.asks, asks), max = Math.max(tb, ta) || 1;
       for (let i = 0; i < 21; i++) { scene.book.bids[i] = bids[i] / max; scene.book.asks[i] = asks[i] / max; }

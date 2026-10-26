@@ -77,23 +77,58 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
   const bS = new Float32Array(21), aS = new Float32Array(21);
   const curve = (arr: Float32Array, u: number) => { const f = u * 20, i = Math.min(19, Math.floor(f)), t = f - i; return arr[i] + (arr[i + 1] - arr[i]) * t; };
   let raceTick = 0;
+  // The landscape only varies across the book (x), so height and colour are worked out once per
+  // column, not per particle. Pulses and the sweep are per-column too, which keeps them cheap.
+  const GW = small ? 120 : 180, GH = Math.max(2, Math.floor(N / GW));
+  const cY = new Float32Array(GW), cR = new Float32Array(GW), cG = new Float32Array(GW), cB = new Float32Array(GW), cSpray = new Float32Array(GW);
+  // a market order sweeping one side: levels vanish front-first, then the book refills
+  let sweep: null | { bid: boolean; lvl: number; t0: number } = null;
 
   const shapes: Record<Shape, (t: number) => void> = {
     depth(t) {
       if (S.book.live) { for (let k = 0; k < 21; k++) { bS[k] += (S.book.bids[k] - bS[k]) * 0.12; aS[k] += (S.book.asks[k] - aS[k]) * 0.12; } liveMix += (1 - liveMix) * 0.03; }
       else liveMix *= 0.97;
-      const GW = small ? 120 : 180, GH = Math.max(2, Math.floor(N / GW));
-      for (let i = 0; i < N; i++) {
-        const gx = i % GW, gz = Math.min(GH - 1, Math.floor(i / GW)), x = -3.2 + 6.4 * gx / (GW - 1), z = -1.8 + 3.6 * gz / (GH - 1), d = Math.abs(x);
+      const now = performance.now(), hv = S.hover;
+      // drop pulses that have crossed the book
+      while (S.pulses.length && now - S.pulses[0].t > 1800) S.pulses.shift();
+      // sweep: front = how far into the book the order has eaten (in u), eat = cumulative qty removed so far
+      let sF = 0, sMix = 0, sBid = false, eat = 0;
+      if (sweep) {
+        const a = (now - sweep.t0) / 1000, end = (sweep.lvl + 1) / 20, dur = 0.3 + 0.035 * sweep.lvl;
+        sBid = sweep.bid; sF = end * Math.min(1, a / dur);
+        sMix = a < dur + 0.5 ? 1 : Math.max(0, 1 - (a - dur - 0.5) / 1.3);
+        eat = curve(sBid ? bS : aS, sF);
+        if (sMix <= 0) sweep = null;
+      }
+      for (let gx = 0; gx < GW; gx++) {
+        const x = -3.2 + 6.4 * gx / (GW - 1), d = Math.abs(x), bid = x < 0;
+        if (d < 0.07) { cY[gx] = 0; cR[gx] = 0.7; cG[gx] = 0.7; cB[gx] = 0.75; cSpray[gx] = 0; continue; }
         const u = Math.min(1, (d - 0.07) / 3.1), sim = Math.pow(Math.max(0, u), 0.62);
-        const depth = d < 0.07 ? 0 : 0.12 + 1.15 * (liveMix > 0.001 ? liveMix * curve(x < 0 ? bS : aS, u) + (1 - liveMix) * sim : sim);
+        let live = curve(bid ? bS : aS, u), spray = 0;
+        if (sMix > 0 && bid === sBid) {
+          live = Math.max(0, live - eat * sMix);
+          if (u <= sF + 0.01 && u > sF - 0.06 && sF < (sweep ? (sweep.lvl + 1) / 20 : 0)) spray = 1 - (sF - u) / 0.06;
+        }
+        let pulse = 0;
+        for (let k = 0; k < S.pulses.length; k++) {
+          const p = S.pulses[k]; if ((p.side === 'bid') !== bid) continue;
+          // wide and slow enough that the eased particles actually catch it
+          const age = (now - p.t) / 1000, du = (u - age * 0.6) / 0.08;
+          pulse += p.amp * Math.exp(-du * du) * (1 - age / 1.8);
+        }
+        const depth = 0.12 + 1.15 * (liveMix > 0.001 ? liveMix * live + (1 - liveMix) * sim : sim);
+        const lit = hv && hv.lvl < HOVER_LEVELS && bid === (hv.side === 'bid') && Math.min(19, Math.floor(u * 20)) === hv.lvl;
+        const h = Math.min(1, depth + 0.25), dm = (lit ? 1.7 : 0.62) + Math.min(1.5, pulse) * 1.3 + spray * 1.2;
+        cY[gx] = depth + (lit ? 0.04 : 0) + Math.min(1.5, pulse) * 0.18; cSpray[gx] = spray;
+        if (bid) { cR[gx] = (0.16 + 0.2 * h) * dm; cG[gx] = (0.55 + 0.4 * h) * dm; cB[gx] = (0.5 + 0.3 * h) * dm; }
+        else { cR[gx] = (0.6 + 0.4 * h) * dm; cG[gx] = (0.18 + 0.2 * h) * dm; cB[gx] = (0.26 + 0.2 * h) * dm; }
+      }
+      for (let i = 0; i < N; i++) {
+        const gx = i % GW, gz = Math.min(GH - 1, Math.floor(i / GW)), x = -3.2 + 6.4 * gx / (GW - 1), z = -1.8 + 3.6 * gz / (GH - 1);
         const wob = 0.07 * Math.sin(z * 3.6 + t * 1.1 + x * 1.7) + 0.045 * Math.sin(x * 7.0 - t * 0.9 + z) + 0.03 * Math.sin((x + z) * 11.0 + t * 2.2);
         const rr = Math.hypot(x - ripX, z - ripZ), rip = 0.32 * Math.exp(-rr * rr * 1.6) * Math.sin(rr * 9.0 - t * 7.0);
-        const hv = S.hover, lit = hv && d >= 0.07 && (x < 0) === (hv.side === 'bid') && Math.min(19, Math.floor(u * 20)) === hv.lvl;
-        const y = depth * (0.85 + 0.15 * Math.sin(z * 1.3 + t * 0.6)) + wob + rip - 0.9 + (lit ? 0.04 : 0), h = Math.min(1, depth + 0.25), dm = lit ? 1.7 : 0.62;
-        if (d < 0.07) set(i, x, y, z, 0.7, 0.7, 0.75);
-        else if (x < 0) set(i, x, y, z, (0.16 + 0.2 * h) * dm, (0.55 + 0.4 * h) * dm, (0.5 + 0.3 * h) * dm);
-        else set(i, x, y, z, (0.6 + 0.4 * h) * dm, (0.18 + 0.2 * h) * dm, (0.26 + 0.2 * h) * dm);
+        const sp = cSpray[gx] > 0 ? cSpray[gx] * rnd[i] * rnd[(i * 7) % N] * 1.6 : 0; // filled orders kick up off the book
+        set(i, x, cY[gx] * (0.85 + 0.15 * Math.sin(z * 1.3 + t * 0.6)) + wob + rip - 0.9 + sp, z, cR[gx], cG[gx], cB[gx]);
       }
     },
     quant(t) {
@@ -203,28 +238,38 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
   const onMove = (e: PointerEvent) => { nmx = e.clientX / innerWidth * 2 - 1; nmy = e.clientY / innerHeight * 2 - 1; hovering = e.pointerType === 'mouse'; };
   addEventListener('pointermove', onMove);
 
+  // march along the current ray until it dips under the landscape surface; returns the level it lands on
+  const pick = (): null | { side: 'bid' | 'ask'; lvl: number } => {
+    const o = ray.ray.origin, dir = ray.ray.direction;
+    for (let s = 2; s < 14; s += 0.05) {
+      const px = o.x + dir.x * s, py = o.y + dir.y * s, pz = o.z + dir.z * s, ax = Math.abs(px);
+      if (ax > 3.4 || Math.abs(pz) > 2) { if (py < -1.2) break; continue; }
+      const uu = Math.min(1, Math.max(0, (ax - 0.07) / 3.1)), surf = ax < 0.07 ? -0.9 : 0.12 + 1.15 * curve(px < 0 ? bS : aS, uu) - 0.9;
+      if (py <= surf + 0.03) return ax >= 0.07 ? { side: px < 0 ? 'bid' : 'ask', lvl: Math.min(19, Math.floor(uu * 20)) } : null;
+    }
+    return null;
+  };
+  const tmpV = new THREE.Vector2();
+
   const t0 = performance.now();
   let raf = 0, dim = 1;
   const step = (t: number) => {
     const shape = S.shape;
     if (shape === 'depth') {
-      ray.setFromCamera(new THREE.Vector2(nmx, -nmy), camera);
       S.hover = null;
+      if (S.fire) {
+        // a click: resolve it against the book and start the sweep
+        ray.setFromCamera(tmpV.set(S.fire.nx, -S.fire.ny), camera); S.fire = null;
+        const p = liveMix > 0.5 && !sweep ? pick() : null;
+        if (p) { sweep = { bid: p.side === 'bid', lvl: p.lvl, t0: performance.now() }; S.onSweep?.(p.side, p.lvl); }
+      }
+      ray.setFromCamera(tmpV.set(nmx, -nmy), camera);
       if (ray.ray.intersectPlane(plane, hit)) {
         ripX += (hit.x - ripX) * 0.12; ripZ += (hit.z - ripZ) * 0.12;
       }
-      if (hovering && liveMix > 0.5) {
-        // march along the cursor ray until it dips under the landscape surface
-        const o = ray.ray.origin, dir = ray.ray.direction;
-        for (let s = 2; s < 14; s += 0.05) {
-          const px = o.x + dir.x * s, py = o.y + dir.y * s, pz = o.z + dir.z * s, ax = Math.abs(px);
-          if (ax > 3.4 || Math.abs(pz) > 2) { if (py < -1.2) break; continue; }
-          const uu = Math.min(1, Math.max(0, (ax - 0.07) / 3.1)), surf = ax < 0.07 ? -0.9 : 0.12 + 1.15 * curve(px < 0 ? bS : aS, uu) - 0.9;
-          if (py <= surf + 0.03) { const lvl = Math.floor(uu * 20); if (ax >= 0.07 && lvl < HOVER_LEVELS) S.hover = { side: px < 0 ? 'bid' : 'ask', lvl }; break; }
-        }
-      }
+      if (hovering && liveMix > 0.5) S.hover = pick();
     }
-    else S.hover = null;
+    else { S.hover = null; S.fire = null; }
     shapes[shape](t);
     for (let i = 0, j = 0; i < N; i++, j += 3) {
       const s = reduce ? 1 : spd[i];

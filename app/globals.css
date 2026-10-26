@@ -58,6 +58,7 @@ main,footer,.top{position:relative;z-index:2}
 .feed{font-variant-numeric:tabular-nums;color:var(--faint);min-height:1.5em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .feed[data-s="live"]{color:var(--soft)}
 .feed[data-s="wait"]{color:var(--muted)}
+.feed[data-s="fill"]{color:var(--ink)}
 .hero h1{position:relative;margin:0;font-size:clamp(52px,10.4vw,168px);font-weight:600;line-height:.92;letter-spacing:-.055em;white-space:nowrap}
 .hero h1 .wd{display:inline-block}
 .namefx{position:absolute;pointer-events:none;display:none}
@@ -374,6 +375,7 @@ footer .w{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;pad
 .readout-tip .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em}
 .readout-tip .k.bid{color:var(--teal)}
 .readout-tip .k.ask{color:var(--coral)}
+.readout-tip i{font-style:normal;font-size:10.5px;color:var(--faint);margin-top:2px}
 
 .dhint{display:none;margin:0 0 8px}
 @media (max-width:900px){
