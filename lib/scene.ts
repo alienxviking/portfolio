@@ -10,6 +10,7 @@ export const OB: Record<Op, { map: number; heap: number; ours: number }> = {
   cancel: { map: 201.6, heap: 471.2, ours: 38.3 },
   add: { map: 113.4, heap: 71.2, ours: 56.7 },
 };
+export type Bench = Record<Op, { map: number; heap: number; ours: number }>;
 
 export const scene = {
   shape: 'depth' as Shape,
@@ -22,6 +23,8 @@ export const scene = {
   len: [201.6 / 471.2, 1, 38.3 / 471.2],
   sift: 'fused' as SiftMode,
   onRace: null as null | ((text: string | null) => void),
+  // order-book medians measured in this browser by the WASM build; null until the visitor runs it
+  measured: null as null | Bench,
   // live BTCUSDT book: cumulative qty at 0..20 levels from the touch, normalised so the deeper side ends at 1
   book: { live: false, bids: new Float32Array(21), asks: new Float32Array(21),
     // raw levels for the hover readout: price, size, cumulative size (BTC), best first

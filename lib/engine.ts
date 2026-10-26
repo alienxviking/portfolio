@@ -135,18 +135,20 @@ export function startEngine(canvas: HTMLCanvasElement, opts: { small: boolean; r
       }
     },
     lob(t) {
-      const o = OB[S.op], tl = [o.map / 471.2, o.heap / 471.2, o.ours / 471.2], ns = [o.map, o.heap, o.ours], fin = [0, 0, 0];
+      const o = (S.measured ?? OB)[S.op], ns = [o.map, o.heap, o.ours], top = Math.max(...ns), tl = ns.map((v) => v / top), fin = [0, 0, 0];
+      // slow the race down so the slowest book takes about 5 s, whatever this machine measured
+      const slow = [100, 50, 20, 10, 5].find((f) => top * 0.1 * f / 1000 <= 6) ?? 5;
       if (S.race) {
         const el = (performance.now() - S.race.t0) / 1000, names = ['std::map', 'heap', 'ours'], txt: string[] = [];
         let done = 0;
         for (let q = 0; q < 3; q++) {
-          const realMs = ns[q] * 100000 / 1e6, pr = Math.min(1, el / (realMs * 0.1));
+          const realMs = ns[q] * 100000 / 1e6, pr = Math.min(1, el / (realMs * slow / 1000));
           S.len[q] = pr; fin[q] = pr >= 1 ? 1 : 0; if (pr >= 1) done++;
           txt.push(names[q] + (pr >= 1 ? ' ✓ ' + realMs.toFixed(2) + ' ms' : ' …'));
         }
         if ((raceTick++ & 1) === 0 && S.onRace)
-          S.onRace(`100,000 ${S.op}s · clock ${Math.min(el * 10, Math.max(...ns) * 0.1).toFixed(2)} ms · ${txt.join(' · ')} · slowed 100×`);
-        if (done === 3 && el > Math.max(...ns) * 0.01 + 1.8) { S.race = null; S.onRace?.(null); }
+          S.onRace(`100,000 ${S.op}s · clock ${Math.min(el * 1000 / slow, top * 0.1).toFixed(2)} ms · ${txt.join(' · ')} · slowed ${slow}×${S.measured ? ' · on your CPU' : ''}`);
+        if (done === 3 && el > top * 0.1 * slow / 1000 + 1.8) { S.race = null; S.onRace?.(null); }
       } else for (let k = 0; k < 3; k++) S.len[k] += (tl[k] - S.len[k]) * 0.07;
       const rows = [0.85, 0.0, -0.85], cs = [[0.55, 0.58, 0.66], [0.42, 0.44, 0.52], [0.3, 1.0, 0.55]], x0 = -1.6, full = 3.8;
       for (let i = 0; i < N; i++) {

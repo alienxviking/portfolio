@@ -122,6 +122,7 @@ main,footer,.top{position:relative;z-index:2}
 .seg button[aria-pressed="true"]{color:#0a0a0a}
 .seg .ind{position:absolute;inset:0;border-radius:999px;background:var(--ink);z-index:1}
 .ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.b:disabled{opacity:.6;cursor:progress}
 .readout{font-family:var(--mono);font-size:12px;color:var(--soft);text-align:right;min-height:1.6em}
 
 /* index */
